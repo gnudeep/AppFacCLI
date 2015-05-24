@@ -16,8 +16,8 @@ func main() {
 
 	//app.Run(os.Args)
 
-	//command `cf` without argument
-	if len(os.Args) == 1 || os.Args[1] == "help" {
+	//command `appfac` without argument
+	if len(os.Args) == 1 || os.Args[1] == "help" || os.Args[1] == "h"{
 		println("Showing help commands")
 		app.Run(os.Args)
 	}
