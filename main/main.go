@@ -30,7 +30,6 @@ func main() {
 
 		var jsonStr = []byte(`{action='login',userName='*****',password='*****'}`)
 		req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
-		req.Header.Set("X-Custom-Header", "myvalue")
 		req.Header.Set("Content-Type", "application/json")
 
 		client := &http.Client{}
