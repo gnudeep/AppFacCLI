@@ -22,13 +22,21 @@ func main() {
 	//command `appfac` without argument
 	if len(os.Args) == 1 || os.Args[1] == "help" || os.Args[1] == "h" {
 		println("Showing help commands")
+		app.Run(os.Args)
+	}else if len(os.Args)>2{
+		callCoreCommand()
+	}
 
+}
+
+
+	func callCoreCommand() {
 		//Testing a curl command
 
 		url := "https://apps.cloud.wso2.com/appmgt/site/blocks/user/login/ajax/login.jag"
 		fmt.Println("URL:>", url)
 
-		var jsonStr = []byte(`{action='login',userName='*****',password='*****'}`)
+		var jsonStr = []byte(`{action='login',userName='<userName>',password='<password>`)
 		req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 		req.Header.Set("Content-Type", "application/json")
 
@@ -43,8 +51,9 @@ func main() {
 		fmt.Println("response Headers:", resp.Header)
 		body, _ := ioutil.ReadAll(resp.Body)
 		fmt.Println("response Body:", string(body))
-
-		app.Run(os.Args)
+		return
 	}
-}
+
+
+
 
