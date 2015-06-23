@@ -2,11 +2,8 @@ package main
 
 import (
 	"os"
+	"github.com/appfac/cli/command"
 	"github.com/codegangsta/cli"
-	"fmt"
-	"bytes"
-	"net/http"
-	"io/ioutil"
 )
 
 func main() {
@@ -23,36 +20,16 @@ func main() {
 	if len(os.Args) == 1 || os.Args[1] == "help" || os.Args[1] == "h" {
 		println("Showing help commands")
 		app.Run(os.Args)
-	}else if len(os.Args)>2{
-		callCoreCommand()
+	}else if os.Args[1] == "login"{
+		c := command.CommandConfigs{"https://apps.cloud.wso2.com/appmgt/site/blocks/user/login/ajax/login.jag", "action=login&userName=dilhasha.wso2.com@dilhashan&password=MASHAALLAH_dilu1" , ""}
+		c.Run()
 	}
 
 }
 
 
-	func callCoreCommand() {
-		//Testing a curl command
 
-		url := "https://apps.cloud.wso2.com/appmgt/site/blocks/user/login/ajax/login.jag"
-		fmt.Println("URL:>", url)
 
-		var jsonStr = []byte(`{action='login',userName='<userName>',password='<password>`)
-		req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
-		req.Header.Set("Content-Type", "application/json")
-
-		client := &http.Client{}
-		resp, err := client.Do(req)
-		if err != nil {
-			panic(err)
-		}
-		defer resp.Body.Close()
-
-		fmt.Println("response Status:", resp.Status)
-		fmt.Println("response Headers:", resp.Header)
-		body, _ := ioutil.ReadAll(resp.Body)
-		fmt.Println("response Body:", string(body))
-		return
-	}
 
 
 
