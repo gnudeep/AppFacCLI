@@ -21,7 +21,7 @@ func main() {
 		println("Showing help commands")
 		app.Run(os.Args)
 	}else if os.Args[1] == "login"{
-		c := command.CommandConfigs{"https://apps.cloud.wso2.com/appmgt/site/blocks/user/login/ajax/login.jag", "action=login&userName=dilhasha.wso2.com@dilhashan&password=MASHAALLAH_dilu1" , ""}
+		c := command.CommandConfigs{"https://apps.cloud.wso2.com/appmgt/site/blocks/user/login/ajax/login.jag", "action=login&userName=<username>&password=<pw>" , ""}
 		c.Run()
 	}
 
