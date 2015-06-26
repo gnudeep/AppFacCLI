@@ -4,6 +4,7 @@ import (
 	"os"
 	"github.com/appfac/cli/command"
 	"github.com/codegangsta/cli"
+	"fmt"
 )
 
 func main() {
@@ -13,6 +14,7 @@ func main() {
 	app.Action = func(c *cli.Context) {
 		println("first appfac CLI command!")
 	}
+	cmdFactory := command.NewFactory()
 
 	//app.Run(os.Args)
 
@@ -20,9 +22,12 @@ func main() {
 	if len(os.Args) == 1 || os.Args[1] == "help" || os.Args[1] == "h" {
 		println("Showing help commands")
 		app.Run(os.Args)
-	}else if os.Args[1] == "login"{
-		c := command.CommandConfigs{"https://apps.cloud.wso2.com/appmgt/site/blocks/user/login/ajax/login.jag", "action=login&userName=<username>&password=<pw>" , ""}
-		c.Run()
+	}else if _, ok := cmdFactory.CmdsByName[os.Args[1]]; ok{
+		c:=cmdFactory.CmdsByName[os.Args[1]]
+		requirements:=c.Requirements()
+		fmt.Println(requirements)
+		configs:=c.Configs(requirements)
+		configs.Run();
 	}
 
 }
