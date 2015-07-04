@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
-	"github.com/appfac/cli/terminal"
+
 )
 //Unix specific
 const (
@@ -26,7 +26,7 @@ var ws syscall.WaitStatus = 0
 
 
 type Login struct {
-	//should get repo location for login details
+	//to be added
 }
 
 func NewLogin() (cmd Login) {
@@ -153,4 +153,3 @@ func echoOn(fd []uintptr) {
 		syscall.Wait4(pid, &ws, 0, nil)
 	}
 }
-

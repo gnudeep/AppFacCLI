@@ -7,18 +7,16 @@ import (
 	"io/ioutil"
 )
 
-type concreteFactory struct {
-	CmdsByName map[string]Command
+
+type Command interface {
+	Metadata() CommandMetadata
+	Run()
 }
 
-func NewFactory() (factory concreteFactory) {
-
-	factory.CmdsByName = make(map[string]Command)
-	factory.CmdsByName["login"]=NewLogin()
-	factory.CmdsByName["triggerBuild"]=NewBuild()
-	factory.CmdsByName["listApps"]=NewAppList()
-	factory.CmdsByName["listVersions"]=NewVersionsList()
-	return
+type CommandConfigs struct {
+	Url string
+	Query string
+	Cookie string
 }
 
 func (c CommandConfigs) Run() {
@@ -39,3 +37,4 @@ func (c CommandConfigs) Run() {
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println("response Body:", string(body))
 }
+

@@ -12,12 +12,11 @@ type concreteFactory struct {
 }
 
 func NewFactory() (factory concreteFactory) {
-
 	factory.CmdsByName = make(map[string]Command)
 	factory.CmdsByName["login"]=NewLogin()
 	factory.CmdsByName["triggerBuild"]=NewBuild()
-	factory.CmdsByName["listApps"]=NewAppList()
-	factory.CmdsByName["listVersions"]=NewVersionsList()
+	//command for triggering a build
+	//factory.cmdsByName["getAppInfo"]
 	return
 }
 
@@ -39,3 +38,4 @@ func (c CommandConfigs) Run() {
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println("response Body:", string(body))
 }
+
