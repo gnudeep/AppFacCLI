@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
-	"io/ioutil"
 )
 
 type concreteFactory struct {
@@ -21,7 +20,7 @@ func NewFactory() (factory concreteFactory) {
 	return
 }
 
-func (c CommandConfigs) Run() {
+func (c CommandConfigs) Run() (*http.Response){
 	fmt.Println("URL:>", c.Url)
 	var jsonStr = []byte(c.Query)
 	req, err := http.NewRequest("POST", c.Url, bytes.NewBuffer(jsonStr))
@@ -29,13 +28,15 @@ func (c CommandConfigs) Run() {
 	req.Header.Set("Cookie", c.Cookie)
 	client := &http.Client{}
 	resp, err := client.Do(req)
-	if err != nil {
-	panic(err)
-	}
-	defer resp.Body.Close()
 
-	fmt.Println("response Status:", resp.Status)
-	fmt.Println("response Headers:", resp.Header)
+	if err != nil {
+		panic(err)
+	}
+
+	/*fmt.Println("response Status:", resp.Status)
+	fmt.Println("response Headers:", resp.Header.Get("Content-Type"))
 	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("response Body:", string(body))
+	fmt.Println("response Body:", string(body))*/
+
+	return resp
 }
