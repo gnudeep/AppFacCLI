@@ -8,6 +8,8 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"io/ioutil"
+	"net/http"
 
 )
 //Unix specific
@@ -76,6 +78,25 @@ func (login Login) Requirements()(reqs CommandRequirements){
 	return
 }
 
+func(login Login) Run(c CommandConfigs){
+	var resp *http.Response
+	var bodyStr string
+	resp=c.Run()
+	defer resp.Body.Close()
+	if(resp.Status=="200 OK"){
+		body, _ := ioutil.ReadAll(resp.Body)
+		bodyStr=string(body)
+		if(strings.Contains(bodyStr, "true")){
+			fmt.Println("You have Successfully logged in.")
+			cookie:=strings.Split(resp.Header.Get("Set-Cookie"),";")
+			fmt.Println("Cookie for the session is:",cookie[0])
+		}else{
+			fmt.Println("Authorization failed. Please try again!")
+		}
+	}
+
+
+}
 /**Ask Password functionality for unix*/
 
 func (login Login) AskForPassword(prompt string) (passwd string) {
