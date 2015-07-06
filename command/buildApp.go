@@ -3,6 +3,11 @@ package command
 import (
 	"fmt"
 	"bytes"
+	"io/ioutil"
+	"strings"
+	"net/http"
+	"encoding/json"
+	"github.com/appfac/cli/formats"
 )
 
 type Build struct {
@@ -76,3 +81,29 @@ func (build Build) Requirements()(reqs CommandRequirements){
 	reqs.Version=version
 	return
 }
+func(build Build) Run(c CommandConfigs) {
+	var resp *http.Response
+	var bodyStr string
+	resp = c.Run()
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	if (resp.Status == "200 OK") {
+		bodyStr = string(body)
+		var errorFormat formats.ErrorFormat
+		err := json.Unmarshal([]byte(bodyStr), &errorFormat)
+		if (err == nil) {
+			//<TODO> Make these error checking functionality common
+			if (errorFormat.ErrorCode == http.StatusUnauthorized) {
+				fmt.Println("Your session has expired.Please login and try again!")
+			}else if (strings.Contains(bodyStr, "null")) {
+				fmt.Println("Build is being triggered.....")
+			}
+		}
+	}
+}
+
+
+
+
+
