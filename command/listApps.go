@@ -3,6 +3,10 @@ package command
 import (
 	"fmt"
 	"bytes"
+	"io/ioutil"
+	"net/http"
+	"encoding/json"
+	"github.com/appfac/cli/formats"
 )
 
 type AppList struct {
@@ -48,4 +52,31 @@ func (applist AppList) Requirements()(reqs CommandRequirements){
 	reqs.Cookie=cookie
 	reqs.UserName=username
 	return
+}
+
+func(applist AppList) Run(c CommandConfigs){
+	var resp *http.Response
+	var bodyStr string
+	resp = c.Run()
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+	if (resp.Status == "200 OK") {
+		bodyStr = string(body)
+		var errorFormat formats.ErrorFormat
+		err := json.Unmarshal([]byte(bodyStr), &errorFormat)
+		if (err == nil) {
+			//<TODO> Make these error checking functionality common
+			if (errorFormat.ErrorCode == http.StatusUnauthorized) {
+				fmt.Println("Your session has expired.Please login and try again!")
+			}
+		}else{
+			var apps []formats.AppFormat
+			err := json.Unmarshal([]byte(bodyStr), &apps)
+			if(err ==nil){
+				fmt.Println("You have ", len(apps)," applications")
+
+			}
+
+		}
+	}
 }
