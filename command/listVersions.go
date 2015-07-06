@@ -62,3 +62,6 @@ func (versionsList VersionsList) Requirements()(reqs CommandRequirements){
 	reqs.ApplicationKey=appKey
 	return
 }
+func(versionsList VersionsList) Run(c CommandConfigs){
+
+}
